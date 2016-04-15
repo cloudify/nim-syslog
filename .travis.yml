@@ -1,0 +1,25 @@
+sudo: false
+dist: precise
+language: c
+addons:
+  apt:
+    packages:
+    - nim
+
+compiler:
+  - gcc
+
+install:
+  - |
+    git clone https://github.com/nim-lang/nimble.git
+    (cd nimble && nim c src/nimble)
+    export PATH=$PATH:$(pwd)/nimble/src
+    nimble update
+    nimble install gtk2
+
+script:
+    - nim c --cc:$CC --verbosity:0 -r tests/singlethread.nim
+
+branches:
+  except:
+    - gh-pages
